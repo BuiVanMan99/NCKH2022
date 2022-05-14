@@ -267,107 +267,6 @@
           </div>
         </div>
       </div>
-      <!-- //////////////////////// HỒ 2 ///////////////////// -->
-      
-      <div class="row mt-5" id="numbers">
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-header text-center">Các thông số ao nuôi 2</h3>
-              <div class="card-text mt-3">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-3">
-                      <div class="card text-center">
-                        <div class="card-body">
-                          <div class="card-text mt-2">
-                            <i
-                              class="fas fa-thermometer-three-quarters fa-7x"
-                              style="color: #e21d58"
-                            ></i>
-                          </div>
-                        </div>
-                        <div class="card-footer text-muted">Nhiệt độ <h5 id="avgTemp1"></h5></div>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="card text-center">
-                        <div class="card-body">
-                          <div class="card-text mt-2">
-                            <img
-                              style="width: 7em"
-                              src="images/ph.png"
-                              alt="ph-meter"
-                            />
-                          </div>
-                        </div>
-                        <div class="card-footer text-muted">Độ pH <h5 id="avgPH1"></h5></div>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="card text-center">
-                        <div class="card-body">
-                          <div class="card-text mt-2">
-                            <img
-                              style="width: 7em"
-                              src="images/salinity.png"
-                              alt="salinity"
-                            />
-                          </div>
-                        </div>
-                        <div class="card-footer text-muted">Độ mặn <h5 id="avgDoMan1"></h5></div>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="card text-center">
-                        <div class="card-body">
-                          <div class="card-text mt-2">
-                            <img
-                              style="width: 7em"
-                              src="images/oxygen-saturation.png"
-                              alt="oxygen-saturation"
-                            />
-                          </div>
-                        </div>
-                        <div class="card-footer text-muted">
-                          Nồng độ oxy hòa tan <h5 id="avgOxy1"></h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br id="charts" />
-      <div class="row mt-5">
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-header text-center">Nhiệt độ</h3>
-              <div class="card-text">
-                <div id="temp1" style="height: 380px; width: 100%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="row mt-5">
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-header text-center">Độ pH</h3>
-              <div class="card-text">
-                <div id="pH1" style="height: 380px; width: 100%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Footer -->
@@ -375,7 +274,7 @@
       <!-- Copyright -->
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
         © 2022 Copyright by
-        <a class="text-white" href="https://facebook.com/"> Bui Van Man</a>
+        <a class="text-white" href="https://www.facebook.com/man.bui.581/"> Bui Van Man</a>
       </div>
       <!-- Copyright -->
     </footer>
@@ -389,13 +288,11 @@
     <script>
       window.onload = function () {
         let dpsTemperature = [];
-        // temperature là biến nhiệt độ để khỏi nhầm lẫn với trường dữ liệu "nhietdo"
         let dpsPH = [];
-        let dpsTemp1 = [];
-        let dpsPH1 = [];
+        let dpsDoMan = [];
         let chartTemperature = new CanvasJS.Chart("temperature", {
           axisY: {
-            title: "Nhiệt độ (°C)",
+            title: "Nhiệt đô (°C)",
             suffix: " °C",
           },
           data: [
@@ -419,34 +316,6 @@
           ],
         });
 
-        //////////////// /* Hồ 2 //////////
-        let chartTemp1 = new CanvasJS.Chart("temp1", {
-          axisY: {
-            title: "Nhiệt độ",
-            suffix: " °C",
-          },
-          data: [
-            {
-              type: "line",
-              dataPoints: dpsTemp1,
-            },
-          ],
-        });
-
-        let chartPH1 = new CanvasJS.Chart("pH1", {
-          axisY: {
-            title: "Phần trăm (%)",
-            suffix: " %",
-          },
-          data: [
-            {
-              type: "line",
-              dataPoints: dpsPH1,
-            },
-          ],
-        });
-        //////////////// Hồ 2 */ //////////
-
         let firebaseConfig = {
           apiKey: "AIzaSyA8obnuWIkNNaJmPzj4yCNpJ2FgKmJ_h5w",
           authDomain: "nckh-qnu-bc114.firebaseapp.com",
@@ -462,6 +331,7 @@
         let updateInterval = 3000;
         let dataPoints = [];
         let dataLength = 22;
+
         let updateChart = function () {
           // Get a reference to the database service
           var database = firebase.database();
@@ -473,7 +343,7 @@
             snapshot.forEach(function (childSnapshot) {
               dataPoints.push({ y: childSnapshot.val(), x: childSnapshot.key });
             });
-            console.log(dataPoints, 'dataPoint');
+            console.log(dataPoints);
             // Temperature processing
             let temperature = dataPoints[7].y;
             document.getElementById("avgTemp").innerHTML = dataPoints[4].y + ' °C';
@@ -488,8 +358,8 @@
             // pH processing
             let ph = dataPoints[15].y;
             document.getElementById("avgPH").innerHTML = dataPoints[12].y + ' %';
-            document.getElementById("avgDoMan").innerHTML = dataPoints[0].y + ' %';
-            document.getElementById("avgOxy").innerHTML = dataPoints[8].y + ' %';
+            document.getElementById("avgDoMan").innerHTML = dataPoints[0].y + ' o/oo';
+            document.getElementById("avgOxy").innerHTML = dataPoints[8].y + ' mg/l';
             for (let k in ph) {
               let obj = {};
               if (ph.hasOwnProperty(k)) {
@@ -498,36 +368,8 @@
               
               dpsPH.push({ label: k, y: obj[k].ph });
             }
-
-             //////////////// /* HỒ 2 /////////////////
-           let _nhietdo1 = dataPoints[6].y;
-           document.getElementById("avgTemp1").innerHTML = dataPoints[5].y + ' °C';
-            for (let k in _nhietdo1) {
-              let obj = {};
-              if (_nhietdo1.hasOwnProperty(k)) {
-                obj[k] = _nhietdo1[k];
-              }
-              dpsTemp1.push({ label: k, y: obj[k].nhietdo1 });
-            }
-
-            let ph1 = dataPoints[14].y;
-            document.getElementById("avgPH1").innerHTML = dataPoints[13].y + ' %';
-            document.getElementById("avgDoMan1").innerHTML = dataPoints[1].y + ' %';
-            document.getElementById("avgOxy1").innerHTML = dataPoints[9].y + ' %';
-            for (let k in ph1) {
-              let obj = {};
-              if (ph1.hasOwnProperty(k)) {
-                obj[k] = ph1[k];
-              }
-              
-              dpsPH1.push({ label: k, y: obj[k].ph1 });
-            }
-            //////////// HỒ 2 */ ///////////
           });
 
-          if (dpsTemp1.length > dataLength) {
-            dpsTemp1.shift();
-          }
           if (dpsTemperature.length > dataLength) {
             dpsTemperature.shift();
           }
@@ -535,18 +377,9 @@
           if (dpsPH.length > dataLength) {
             dpsPH.shift();
           }
-          if (dpsPH1.length > dataLength) {
-            dpsPH1.shift();
-          }
-          
 
           chartTemperature.render();
           chartPH.render();
-          // lệnh render để xuất dữ liệu ra màn hình
-          //// HỒ 2 ////
-          chartTemp1.render();
-          chartPH1.render();
-          
         };
 
         updateChart();
@@ -554,8 +387,6 @@
         setInterval(function () {
           dpsTemperature = [];
           dpsPH = [];
-          dpsPH1 = [];
-          dpsTemp1 = [];
           dataPoints = [];
           updateChart();
         }, updateInterval);
